@@ -6,7 +6,7 @@
 
 const double E = 0.6;
 const double T0 = 0.0;
-const double TF = 35;
+const double TF = 20*M_PI;
 const double H = 0.0005;
 const int NSTEPS = (TF)/H;
 const int DIM = 4;

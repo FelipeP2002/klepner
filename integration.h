@@ -8,8 +8,8 @@ void fderiv(const state_t & y, state_t & dydt, double t)
 {
     dydt[0] = y[2];                                         // q_1=p_1
     dydt[1] = y[3];                                         // q_2'=p_2
-    dydt[2] = -y[0]/std::pow(y[0]*y[0] + y[1]*y[1] , 3/2 ); // q_1''
-    dydt[3] = -y[1]/std::pow(y[0]*y[0] + y[1]*y[1] , 3/2 ); // q_2''
+    dydt[2] = -y[0]/(std::hypot( y[0] , y[1]) * std::hypot( y[0] , y[1]) * std::hypot( y[0] , y[1])); // q_1''
+    dydt[3] = -y[1]/(std::hypot( y[0] , y[1]) * std::hypot( y[0] , y[1]) * std::hypot( y[0] , y[1])); // q_2''
 }
 
 template<typename systema_t, typename state_t>
@@ -125,7 +125,7 @@ S Hamilton(S t, state_t  data)
 {
     double H{};
 
-    H = (data[2]*data[2] + data[3]*data[3])/2 -std::pow(data[0]*data[0] + data[1]*data[1] , -1/2);
+    H = (data[2]*data[2] + data[3]*data[3])/2 - 1/std::hypot(data[0] , data[1]);
     
     return H;
 }
