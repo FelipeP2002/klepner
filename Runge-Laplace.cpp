@@ -37,13 +37,19 @@ template<typename system_t, typename state_t>
     
     std::cout.precision(7);
     const int nsteps = (tmax-tmin)/dt;
+
+    state_t A(2);
+    
     for (int ii = 0; ii <= nsteps; ++ii){
         double t = tmin + ii*dt;
+
+        R_L_R(data, A, t);
+
         std::cout<< t << "  ";
-        for(double val : data ){std::cout<< val << "  ";}
+        for(double val : A){std::cout<< val << "  ";}
         std::cout<<"\n";
         
-        euler_central(deriv, data, t, dt);
+        rk4(deriv, data, t, dt);
 
     }
 }

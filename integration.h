@@ -1,15 +1,17 @@
 #include <iostream>
+#include <cmath>
+#include <vector>
 
 #ifndef __INTEGRATION_H_
 #define __INTEGRATION_H_
 
-typedef std::vector<double> state_t;
+typedef std::vector <double> state_t;
 void fderiv(const state_t & y, state_t & dydt, double t)
 {
-    dydt[0] = y[2];                                         // q_1=p_1
+    dydt[0] = y[2];                                         // q_1'=p_1
     dydt[1] = y[3];                                         // q_2'=p_2
-    dydt[2] = -y[0]/(std::hypot( y[0] , y[1]) * std::hypot( y[0] , y[1]) * std::hypot( y[0] , y[1])); // q_1''
-    dydt[3] = -y[1]/(std::hypot( y[0] , y[1]) * std::hypot( y[0] , y[1]) * std::hypot( y[0] , y[1])); // q_2''
+    dydt[2] = -y[0]/(std::hypot(y[0] , y[1]) * std::hypot(y[0] , y[1]) * std::hypot(y[0] , y[1])); // q_1''
+    dydt[3] = -y[1]/(std::hypot(y[0] , y[1]) * std::hypot(y[0] , y[1]) * std::hypot(y[0] , y[1])); // q_2''
 }
 
 template<typename systema_t, typename state_t>
@@ -125,12 +127,12 @@ S Hamilton(S t, state_t  data)
 {
     double H{};
 
-    H = (data[2]*data[2] + data[3]*data[3])/2 - 1/std::hypot(data[0] , data[1]);
+    H = (data[2]*data[2] + data[3]*data[3])/2 - 1/std::hypot(data[0], data[1]);
     
     return H;
 }
 
-template< typename S, typename state_t>
+template< typename S,  typename state_t>
 S Momentum(S t, state_t data)
 {
     double L{};
@@ -141,5 +143,15 @@ S Momentum(S t, state_t data)
 
 }
 
+
+template< typename state_t>
+state_t R_L_R(state_t data, state_t & A, double t)
+{
+
+    A[0] = data[3] * Momentum(t, data) - data[0]/std::hypot(data[0] , data[1]);
+    A[1] = -data[2] * Momentum( t , data) - data[1]/std::hypot(data[0] , data[1]);
+
+    return A;
+}
 
 #endif // __INTEGRATION_H_
