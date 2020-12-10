@@ -11,8 +11,8 @@ const double H = 0.0005;
 const int NSTEPS = (TF)/H;
 const int DIM = 2;
 
-template<typename system_t, typename state_t>
-    void integrate(system_t deriv, state_t & data, double tmin, double tmax, double dt);
+template<typename state_t>
+    void integrate(state_t & data);
 
 typedef std::vector<double> state_t;
 /* y[0]=q_1
@@ -25,24 +25,24 @@ int main(void)
     state_t y(2*DIM);
     y = {1 - E , 0.0 , 0.0 , std::sqrt( (1 + E)/(1 - E) ) };  // initial conditions
 
-    integrate(fderiv, y, T0, TF, H);
+    integrate(y);
 
     return 0;
 }
 
-template<typename system_t, typename state_t>
-    void integrate(system_t deriv, state_t & data, double tmin, double tmax, double dt)
+template<typename state_t>
+    void integrate(state_t & data)
 {
     
     std::cout.precision(7);
-    const int nsteps = (tmax-tmin)/dt;
-    for (int ii = 0; ii <= nsteps; ++ii){
-        double t = tmin + ii*dt;
+    
+    for (int ii = 0; ii <= NSTEPS; ++ii){
+        double t = T0 + ii*H;
         std::cout<< t << "  ";
         for(double val : data ){std::cout<< val << "  ";}
         std::cout<<"\n";
         
-        euler(deriv, data, t, dt);
+        euler(data, H);
 
     }
 }

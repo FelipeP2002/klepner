@@ -9,10 +9,10 @@ const double T0 = 0.0;
 const double TF = 20*M_PI;
 const double H = 0.0005;
 const int NSTEPS = (TF)/H;
-const int DIM = 4;
+const int DIM = 2;
 
-template<typename system_t, typename state_t>
-    void integrate(system_t deriv, state_t & data, double tmin, double tmax, double dt);
+template< typename state_t>
+    void integrate(state_t & data);
 
 typedef std::vector<double> state_t;
 /* y[0]=q_1
@@ -23,26 +23,26 @@ typedef std::vector<double> state_t;
 
 int main(void)
 {
-    state_t y(DIM);
+    state_t y(2*DIM);
     y = {1 - E , 0.0 , 0.0 , std::sqrt( (1 + E)/(1 - E) ) };  // initial conditions
 
-    integrate(fderiv, y, T0, TF, H);
+    integrate(y);
 
     return 0;
 }
 
-template<typename system_t, typename state_t>
-    void integrate(system_t deriv, state_t & data, double tmin, double tmax, double dt)
+template< typename state_t>
+    void integrate(state_t & data)
 {
     
     std::cout.precision(7);
-    const int nsteps = (tmax-tmin)/dt;
-    for (int ii = 0; ii <= nsteps; ++ii){
-        double t = tmin + ii*dt;
-        std::cout<< t << "  "<< Hamilton(t,data) <<"  "<< Momentum(t, data) <<"\n";
+    
+    for (int ii = 0; ii <= NSTEPS; ++ii){
+        double t = T0 + ii*H;
+        std::cout<< t << "  "<< Hamilton(t,data) <<"  "<< Momentum(data) <<"\n";
         std::cout<<"\n";
         
-        rk4(deriv, data, t, dt);
+        euler_central(data, H);
 
     }
 }
